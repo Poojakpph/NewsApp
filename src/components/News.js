@@ -42,7 +42,7 @@ export class News extends Component {
         "url": "http://www.espncricinfo.com/story/_/id/28970907/learned-watching-1992-world-cup-final-full-again",
         "urlToImage": "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1219926_1296x729.jpg",
         "publishedAt": "2020-03-30T15:26:05Z",
-        "content": "Last week, we at ESPNcricinfo did something we have been thinking of doing for eight years now: pretend-live ball-by-ball commentary for a classic cricket match. We knew the result, yes, but we tried… [+6823 chars]"
+        "content": "Last week, we at ESPNcricinfo did something we have been thinking of doing for eight years now: pretend-live ball-by-ball commentary for a classNameic cricket match. We knew the result, yes, but we tried… [+6823 chars]"
     }
       ]
 
@@ -52,28 +52,69 @@ export class News extends Component {
      console.log("hello i am a constructor from news component")
      this.state={
        articles: this.articles, 
-       loading: false     
+       loading: false,
+       page: 1   
       }
     }
 
+    async componentDidMount(){
+        let url= "https://newsapi.org/v2/top-headlines?country=in&apiKey=5d1bdff280e74547a28cb9f3f685b42c&page=1&pageSize=20";
+        let data=await fetch(url);
+        let parseData= await data.json()
+        console.log(parseData)
+        this.setState({articles: parseData.articles, totalResults:parseData.totalResults})
+    }
+
+    handlePrevClick= async ()=>{
+      console.log("previous");
+      let url= `https://newsapi.org/v2/top-headlines?country=in&apiKey=5d1bdff280e74547a28cb9f3f685b42c&page=${this.state.page-1}&pageSize=20`;
+      let data=await fetch(url);
+      let parseData= await data.json()
+      this.setState({
+        page: this.state.page - 1,
+        articles: parseData.articles
+       })
+    }
+
+  handleNextClick=async ()=>{
+      console.log("next");
+      if(this.state.page + 1 > Math.ceil(this.state.totalResults/20)){
+
+      }
+
+      else{
+          let url= `https://newsapi.org/v2/top-headlines?country=in&apiKey=5d1bdff280e74547a28cb9f3f685b42c&page=${this.state.page+1}&pageSize=20`;
+          let data=await fetch(url);
+          let parseData= await data.json()
+          this.setState({
+            page: this.state.page + 1,
+            articles: parseData.articles
+          })
+      }
+   }
+  
   render() {
     return (
       <div className="container my-3" >
          <h2>Top Headlines</h2>
-         <div className="row">
-           <div className="col-md-4">
-             <NewsItem title="mytitle" description="mydesc" 
-                imgurl="https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1219926_1296x729.jpg" newsUrl="todo" />
-           </div>
-           <div className="col-md-4">
-             <NewsItem title="mytitle" description="mydesc" />
-           </div>
-           <div className="col-md-4">
-             <NewsItem title="mytitle" description="mydesc" />
-           </div>
+
+        <div className="row">
+           {this.state.articles.map((element)=>{
+                return <div className="col-md-4" key={element.url}>
+                <NewsItem title={element.title?element.title:""}  
+                description={element.description?element.description:""} imgurl={element.urlToImage}  newsUrl={element.url} />
+               </div>
+            }) }
+         </div> 
+
+         <div className="container d-flex justify-content-between">
+            <button disabled={this.state.page<=1} type="button" className="btn btn-dark" onClick={this.handlePrevClick}>&larr; Previous</button>
+            <button type="button" className="btn btn-dark" onClick={this.handleNextClick}>Next &rarr;</button>
          </div>
-      </div>
-      
+
+      </div>  
     )
   }
 }
+
+export default News
