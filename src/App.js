@@ -1,22 +1,33 @@
+import './App.css';
 import React, { Component } from 'react'
+import News from './components/News';
+import Navbar from './components/Navbar';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes
+} from "react-router-dom";
 
-export  class NewsItem extends Component {  
+
+export default class App extends Component {
   render() {
-    let {title, description, imgurl, newsUrl}= this.props;
-
     return (
-      <div className="my-3">
-         <div  className="card">
-            <img src={!imgurl?"https://c.ndtvimg.com/2023-04/e9pqohd_tim-david-bcci_625x300_22_April_23.jpg? im=FaceCrop,algorithm=dnn,width=1200,height=675":imgurl}  className="card-img-top" alt="..."/>
-            <div  className="card-body">
-            <h5  className="card-title">{title}</h5>
-            <p  className="card-text">{description}</p>
-            <a href={newsUrl}  className="btn btn-sm btn-dark">Read More</a>
-        </div>
-       </div>
-    </div>
+      <div>
+        <Router>
+          <Navbar/>
+            <Routes>
+            <Route path='/' element={<News key='general' pageSize={12} country='us' category='general' />}></Route>
+            <Route path='/business' element={<News key='business' pageSize={12} country='us' category='business' />}></Route>
+            <Route path='/entertainment' element={<News key='entertainment' pageSize={12} country='us' category='entertainment' />}></Route>
+            <Route path='/health' element={<News key='health' pageSize={12} country='us' category='health' />}></Route>
+            <Route path='/science' element={<News key='science' pageSize={12} country='us' category='science' />}></Route>
+            <Route path='/sports' element={<News key='sports' pageSize={12} country='us' category='sports' />}></Route>
+            <Route path='/technology' element={<News key='technology' pageSize={12} country='us' category='technology' />}></Route>
+          </Routes>
+       </Router>
+      </div>
     )
   }
 }
-export default NewsItem
+
 
