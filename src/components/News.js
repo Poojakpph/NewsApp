@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import PropTypes from 'prop-types'
 
+
 export class News extends Component {
    //created a variable named articles  (imported form sampleOutput.json file)
   articles=[
@@ -111,7 +112,8 @@ export class News extends Component {
            {this.state.articles.map((element)=>{
                 return <div className="col-md-4" key={element.url}>
                 <NewsItem title={element.title?element.title:""}  
-                description={element.description?element.description:""} imgurl={element.urlToImage}  newsUrl={element.url} />
+                description={element.description?element.description:""} imgurl={element.urlToImage}  newsUrl={element.url} author={element.author}
+                date={element.publishedAt} source={element.source.name} />
                </div>
             }) }
          </div> 
