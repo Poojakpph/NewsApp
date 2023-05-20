@@ -8,6 +8,7 @@ import {
   Routes
 } from "react-router-dom";
 
+
 export default class App extends Component {
    pageSize= 20;   //we can change the no. of news per page from here (hardcode)
   render() {
